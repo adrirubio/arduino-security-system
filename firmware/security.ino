@@ -5,6 +5,8 @@ const int buttonPin = 2;
 
 // 0 = disarmed, 1 = armed, 2 = alert
 int systemState = 0;
+unsigned long buttonPressTime = 0;
+bool buttonWasPressed = false;
 
 void setup() {
   // buzzer
@@ -33,7 +35,7 @@ void loop() {
         digitalWrite(4, HIGH);
         startupBeep();
         // wait for startup to finish
-        delay(1000);
+        delay(5000);
         systemState = 1;
       }
     }
@@ -49,7 +51,43 @@ void loop() {
       digitalWrite(5, HIGH); // red on
 
       systemState = 2;
-      intruderAlert();
+    }
+
+    // shutdown or reset
+    int buttonState = digitalRead(buttonPin);
+
+    if (buttonState == LOW && !buttonWasPressed) {
+      // button just pressed
+      buttonPressTime = millis();
+      buttonWasPressed = true;
+    }
+
+    // button release
+    if (buttonState == HIGH && buttonWasPressed) {
+      unsigned long pressDuration = millis() - buttonPressTime;
+      buttonWasPressed = false;
+
+      if (pressDuration >= 2000) {
+        Serial.println("Shutting down...");
+
+        // flash yellow light
+        digitalWrite(4, LOW);
+        digitalWrite(6, HIGH);
+        delay(1000);
+        digitalWrite(6, LOW);
+
+        systemState = 0;
+      } else {
+        Serial.print("Three second shutdown...");
+
+        // yellow light
+        digitalWrite(4, LOW);
+        digitalWrite(6, HIGH);
+        delay(3000);
+        digitalWrite(6, LOW);
+
+        systemState = 1;
+      }
     }
   }
 
