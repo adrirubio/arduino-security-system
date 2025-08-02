@@ -31,3 +31,31 @@ void loop() {
     delay(3000);
   }
 }
+
+// startup beep
+void startupBeep() {
+  // play for 200ms at 1000Hz
+  tone(buzzerPin, 1000, 200);
+  delay(250);
+  noTone(buzzerPin);
+}
+
+// intruder alert sound
+void intruderAlert() {
+  unsigned long startTime = millis();
+  while (millis() - startTime < 3000) {
+    // high pitch for alert
+    tone(buzzerPin, 2000);
+    delay(150);
+    noTone(buzzerPin);
+    delay(50);
+  }
+}
+
+// shutdown sound
+void shutdownBeep() {
+  tone(buzzerPin, 400, 300);
+  delay(300);
+  noTone(buzzerPin);
+}
+
