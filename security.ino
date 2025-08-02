@@ -18,8 +18,16 @@ void setup() {
   // pushbutton
   pinMode(2, INPUT_PULLUP);
 
-  Serial.begin(9600);
-  startupBeep();
+  Serial.begin(9600); // start serial communication
+  startupBeep(); // Play startup sound
 }
 
-void loop() {}
+void loop() {
+  int lightVal = analogRead(photoPin);
+  Serial.println(lightVal);
+
+  if (lightVal < 300) {
+    intruderAlert(); // Avoid repeated alarms
+    delay(3000);
+  }
+}
