@@ -52,6 +52,7 @@ void startupBeep1() {
   noTone(buzzerPin);
 }
 
+// in use
 // startup beep 2 (ascending tones)
 void startupBeep2() {
   tone(buzzerPin, 800, 150);
@@ -67,20 +68,21 @@ void startupBeep2() {
 void intruderAlert1() {
   unsigned long startTime = millis();
   while (millis() - startTime < 3000) {
-    tone(buzzerPin, 2000);
+    tone(buzzerPin, 3000);
     delay(150);
     noTone(buzzerPin);
     delay(50);
   }
 }
 
+// in use
 // intruder alert 2 (alternating frequencies)
 void intruderAlert2() {
   unsigned long startTime = millis();
   while (millis() - startTime < 3000) {
-    tone(buzzerPin, 1500);
+    tone(buzzerPin, 3500);
     delay(200);
-    tone(buzzerPin, 2500);
+    tone(buzzerPin, 4500);
     delay(200);
   }
   noTone(buzzerPin);
@@ -93,6 +95,7 @@ void shutdownBeep1() {
   noTone(buzzerPin);
 }
 
+// in use
 // shutdown beep 2 (descending tones)
 void shutdownBeep2() {
   tone(buzzerPin, 1200, 150);

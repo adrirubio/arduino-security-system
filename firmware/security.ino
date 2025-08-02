@@ -33,28 +33,35 @@ void loop() {
 
 // startup beep
 void startupBeep() {
-  // play for 200ms at 1000Hz
-  tone(piezoPin, 1000, 200);
-  delay(250);
-  noTone(piezoPin);
+  tone(buzzerPin, 800, 150);
+  delay(150);
+  tone(buzzerPin, 1200, 150);
+  delay(150);
+  tone(buzzerPin, 1600, 150);
+  delay(150);
+  noTone(buzzerPin);
 }
 
 // intruder alert sound
 void intruderAlert() {
   unsigned long startTime = millis();
   while (millis() - startTime < 3000) {
-    // high pitch for alert
-    tone(piezoPin, 2000);
-    delay(150);
-    noTone(piezoPin, 2000);
-    delay(50);
+    tone(buzzerPin, 3500);
+    delay(200);
+    tone(buzzerPin, 4500);
+    delay(200);
   }
+  noTone(buzzerPin);
 }
 
 // shutdown sound
 void shutdownBeep() {
-  tone(buzzerPin, 400, 300);
-  delay(300);
+  tone(buzzerPin, 1200, 150);
+  delay(150);
+  tone(buzzerPin, 800, 150);
+  delay(150);
+  tone(buzzerPin, 400, 200);
+  delay(200);
   noTone(buzzerPin);
 }
 
