@@ -13,7 +13,36 @@ void setup() {
 void loop() {
   bool currentButtonState = digitalRead(buttonPin);
 
-  if (currentButtonState == LOW && lastButtonState == HIGH) {}
+  if (currentButtonState == LOW && lastButtonState == HIGH) {
+    delay(50);
+
+    switch (buttonPressCount % 3) {
+    case 0:
+      Serial.println("Playing startup beeps");
+      startupBeep1();
+      delay(500);
+      startupBeep2();
+      break;
+
+    case 1:
+      Serial.println("Playing intruder beeps");
+      intruderAlert1();
+      delay(500);
+      intruderAlert2();
+      break;
+
+    case 2:
+      Serial.println("Playing shutdown beeps");
+      shutdownBeep1();
+      delay(500);
+      shutdownBeep2();
+      break;
+    }
+
+    buttonPressCount++;
+  }
+
+  lastButtonState = currentButtonState;
 }
 
 // startup beep 1 (original)
@@ -65,7 +94,7 @@ void shutdownBeep1() {
 }
 
 // shutdown beep 2 (descending tones)
-void shutdownBeep1() {
+void shutdownBeep2() {
   tone(buzzerPin, 1200, 150);
   delay(150);
   tone(buzzerPin, 800, 150);
