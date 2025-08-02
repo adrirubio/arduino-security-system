@@ -98,11 +98,11 @@ void shutdownBeep1() {
 // in use
 // shutdown beep 2 (descending tones)
 void shutdownBeep2() {
+  tone(buzzerPin, 1600, 150);
+  delay(150);
   tone(buzzerPin, 1200, 150);
   delay(150);
   tone(buzzerPin, 800, 150);
   delay(150);
-  tone(buzzerPin, 400, 200);
-  delay(200);
   noTone(buzzerPin);
 }

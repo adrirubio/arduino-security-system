@@ -1,10 +1,13 @@
 // c++
-const byte piezoPin = 3;
+const byte buzzerPin = 3;
 const int photoPin = A0;
+const int buttonPin = 2;
+
+int systemState = 0;
 
 void setup() {
   // buzzer
-  pinMode(piezoPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
 
   // photoresistor
   pinMode(photoPin, INPUT);
@@ -18,16 +21,24 @@ void setup() {
   pinMode(2, INPUT_PULLUP);
 
   Serial.begin(9600); // start serial communication
-  startupBeep(); // Play startup sound
 }
 
 void loop() {
   int lightVal = analogRead(photoPin);
   Serial.println(lightVal);
 
-  if (lightVal < 300) {
-    intruderAlert(); // Avoid repeated alarms
-    delay(3000);
+  if (digitalRead(buttonPin) == LOW) {
+    delay(50) // debounce
+    if (systemState == 0) {
+      digitalWrite(4, HIGH);
+      startupBeep();
+      systemState = 1;
+
+      if (lightVal < 300) {
+        intruderAlert();
+        delay(3000);
+      }
+    }
   }
 }
 
