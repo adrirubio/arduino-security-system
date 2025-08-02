@@ -3,6 +3,7 @@ const byte buzzerPin = 3;
 const int photoPin = A0;
 const int buttonPin = 2;
 
+// 0 = disarmed, 1 = armed, 2 = alert
 int systemState = 0;
 
 void setup() {
@@ -24,22 +25,50 @@ void setup() {
 }
 
 void loop() {
-  int lightVal = analogRead(photoPin);
-  Serial.println(lightVal);
-
-  if (digitalRead(buttonPin) == LOW) {
-    delay(50) // debounce
-    if (systemState == 0) {
-      digitalWrite(4, HIGH);
-      startupBeep();
-      systemState = 1;
-
-      if (lightVal < 300) {
-        intruderAlert();
-        delay(3000);
+  if (systemState == 0) {
+    // check for button press
+    if (digitalRead(buttonPin) == LOW) {
+      delay(50); // debounce
+      if (digitalRead(buttonPin) == LOW) {
+        digitalWrite(4, HIGH);
+        startupBeep();
+        // wait for startup to finish
+        delay(1000);
+        systemState = 1;
       }
     }
   }
+
+  else if (systemState == 1) {
+    int lightVal = analogRead(photoPin);
+    Serial.println(lightVal);
+
+    if (lightVal < 300) {
+      // turn red led on
+      digitalWrite(4, LOW); // green off
+      digitalWrite(5, HIGH); // red on
+
+      systemState = 2;
+      intruderAlert();
+    }
+  }
+
+  else if (systemState == 2) {
+    // alert state, keep buzzing until beam restored
+    int lightVal = analogRead(photoPin);
+    Serial.println(lightVal);
+
+    if (lightVal < 300) {
+      intruderAlert();
+    } else {
+      // beam restored
+      digitalWrite(5, LOW); // red off
+      digitalWrite(4, HIGH); // green on
+      systemState = 1;
+    }
+  }
+
+  delay(200);
 }
 
 // startup beep
