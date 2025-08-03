@@ -147,7 +147,8 @@ void loop() {
 
       if (pressDuration >= 2000) {
         Serial.println("Shutting down...");
-        noTone(buzzerPin);  // Stop alert
+        noTone(buzzerPin); // stop alert
+        digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
         // flash yellow light
         digitalWrite(5, LOW);
@@ -158,6 +159,8 @@ void loop() {
         systemState = 0;
       } else {
         Serial.println("Three second shutdown...");
+        noTone(buzzerPin); // stop alert
+        digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
         // yellow light
         digitalWrite(5, LOW);
