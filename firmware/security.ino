@@ -78,9 +78,12 @@ void loop() {
 
       if (pressDuration >= 2000) {
         Serial.println("Shutting down...");
-
-        // sound
         noTone(buzzerPin);
+        digitalWrite(buzzerPin, LOW); // ensure buzzer is off
+
+        // shutdown sound
+        delay(700);
+        shutdownBeep();
 
         // flash yellow light
         digitalWrite(4, LOW);
@@ -91,9 +94,12 @@ void loop() {
         systemState = 0;
       } else {
         Serial.print("Three second shutdown...");
-
-        // sound
         noTone(buzzerPin);
+        digitalWrite(buzzerPin, LOW); // ensure buzzer is off
+
+        // shutdown sound 2
+        delay(700);
+        shutdownBeep2();
 
         // yellow light
         digitalWrite(4, LOW);
@@ -150,6 +156,10 @@ void loop() {
         noTone(buzzerPin); // stop alert
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
+        // shutdown sound
+        delay(700);
+        shutdownBeep();
+
         // flash yellow light
         digitalWrite(5, LOW);
         digitalWrite(6, HIGH);
@@ -161,6 +171,10 @@ void loop() {
         Serial.println("Three second shutdown...");
         noTone(buzzerPin); // stop alert
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
+
+        // shutdown sound 2
+        delay(700);
+        shutdownBeep2();
 
         // yellow light
         digitalWrite(5, LOW);
