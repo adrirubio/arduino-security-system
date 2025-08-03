@@ -8,6 +8,11 @@ int systemState = 0;
 unsigned long buttonPressTime = 0;
 bool buttonWasPressed = false;
 
+// Alert timing variables
+unsigned long alertStartTime = 0;
+unsigned long lastToneChange = 0;
+int currentTone = 0;
+
 void setup() {
   // buzzer
   pinMode(buzzerPin, OUTPUT);
@@ -35,7 +40,7 @@ void loop() {
         digitalWrite(4, HIGH);
         startupBeep();
         // wait for startup to finish
-        delay(5000);
+        delay(500);
         systemState = 1;
       }
     }
@@ -45,12 +50,16 @@ void loop() {
     int lightVal = analogRead(photoPin);
     Serial.println(lightVal);
 
-    if (lightVal < 300) {
+    digitalWrite(4, HIGH);
+
+    if (lightVal < 700) {
       // turn red led on
       digitalWrite(4, LOW); // green off
       digitalWrite(5, HIGH); // red on
 
       systemState = 2;
+      alertStartTime = millis(); // Start alert timer
+      currentTone = 0;
     }
 
     // shutdown or reset
@@ -70,6 +79,9 @@ void loop() {
       if (pressDuration >= 2000) {
         Serial.println("Shutting down...");
 
+        // sound
+        noTone(buzzerPin);
+
         // flash yellow light
         digitalWrite(4, LOW);
         digitalWrite(6, HIGH);
@@ -79,6 +91,9 @@ void loop() {
         systemState = 0;
       } else {
         Serial.print("Three second shutdown...");
+
+        // sound
+        noTone(buzzerPin);
 
         // yellow light
         digitalWrite(4, LOW);
@@ -92,17 +107,66 @@ void loop() {
   }
 
   else if (systemState == 2) {
-    // alert state, keep buzzing until beam restored
+    // alert state, non-blocking alert while beam broken
     int lightVal = analogRead(photoPin);
     Serial.println(lightVal);
 
-    if (lightVal < 300) {
-      intruderAlert();
+    if (lightVal < 700) {
+      // Continue non-blocking alert
+      unsigned long currentTime = millis();
+      if (currentTime - lastToneChange >= 200) {
+        if (currentTone == 0) {
+          tone(buzzerPin, 3500);
+          currentTone = 1;
+        } else {
+          tone(buzzerPin, 4500);
+          currentTone = 0;
+        }
+        lastToneChange = currentTime;
+      }
     } else {
       // beam restored
+      noTone(buzzerPin); // beam restored
       digitalWrite(5, LOW); // red off
       digitalWrite(4, HIGH); // green on
       systemState = 1;
+    }
+    // Allow button press to shutdown during alert
+    int buttonState = digitalRead(buttonPin);
+
+    if (buttonState == LOW && !buttonWasPressed) {
+      // button just pressed
+      buttonPressTime = millis();
+      buttonWasPressed = true;
+    }
+
+    // button release
+    if (buttonState == HIGH && buttonWasPressed) {
+      unsigned long pressDuration = millis() - buttonPressTime;
+      buttonWasPressed = false;
+
+      if (pressDuration >= 2000) {
+        Serial.println("Shutting down...");
+        noTone(buzzerPin);  // Stop alert
+
+        // flash yellow light
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+        delay(1000);
+        digitalWrite(6, LOW);
+
+        systemState = 0;
+      } else {
+        Serial.println("Three second shutdown...");
+
+        // yellow light
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+        delay(3000);
+        digitalWrite(6, LOW);
+
+        systemState = 1;
+      }
     }
   }
 
@@ -143,3 +207,9 @@ void shutdownBeep() {
   noTone(buzzerPin);
 }
 
+// shutdown sound 2
+void shutdownBeep2() {
+  tone(buzzerPin, 400, 300);
+  delay(300);
+  noTone(buzzerPin);
+}
