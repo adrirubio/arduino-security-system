@@ -1,0 +1,6 @@
+﻿Name,Quantity,Component
+"P1",1,"5 , 5  Power Supply"
+"S1",1," Pushbutton"
+"U1",1," Arduino Uno R3"
+"PIEZO1",1," Piezo"
+"R1",1,"10 kΩ Resistor"

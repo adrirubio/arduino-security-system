@@ -81,14 +81,15 @@ void loop() {
         noTone(buzzerPin);
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
+        // flash yellow light
+        digitalWrite(4, LOW);
+        digitalWrite(6, HIGH);
+
         // shutdown sound
         delay(700);
         shutdownBeep();
 
-        // flash yellow light
-        digitalWrite(4, LOW);
-        digitalWrite(6, HIGH);
-        delay(1000);
+        delay(300);
         digitalWrite(6, LOW);
 
         systemState = 0;
@@ -97,14 +98,15 @@ void loop() {
         noTone(buzzerPin);
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
+        // yellow light
+        digitalWrite(4, LOW);
+        digitalWrite(6, HIGH);
+
         // shutdown sound 2
         delay(700);
         shutdownBeep2();
 
-        // yellow light
-        digitalWrite(4, LOW);
-        digitalWrite(6, HIGH);
-        delay(3000);
+        delay(2300);
         digitalWrite(6, LOW);
 
         systemState = 1;
@@ -156,14 +158,15 @@ void loop() {
         noTone(buzzerPin); // stop alert
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
+        // flash yellow light
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+
         // shutdown sound
         delay(700);
         shutdownBeep();
 
-        // flash yellow light
-        digitalWrite(5, LOW);
-        digitalWrite(6, HIGH);
-        delay(1000);
+        delay(300);
         digitalWrite(6, LOW);
 
         systemState = 0;
@@ -172,14 +175,15 @@ void loop() {
         noTone(buzzerPin); // stop alert
         digitalWrite(buzzerPin, LOW); // ensure buzzer is off
 
+        // yellow light
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+
         // shutdown sound 2
         delay(700);
         shutdownBeep2();
 
-        // yellow light
-        digitalWrite(5, LOW);
-        digitalWrite(6, HIGH);
-        delay(3000);
+        delay(2300);
         digitalWrite(6, LOW);
 
         systemState = 1;

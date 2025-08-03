@@ -1,0 +1,12 @@
+﻿Name,Quantity,Component
+"U1",1," Arduino Uno R3"
+"P1, P2",2,"5 , 5  Power Supply"
+"D1, D3",2,"Red LED"
+"S1",1," Slideswitch"
+"R1, R8, R9, R10",4,"220 Ω Resistor"
+"PIEZO4",1," Piezo"
+"S2",1," Pushbutton"
+"R5",1," Photoresistor"
+"R6, R7",2,"10 kΩ Resistor"
+"D2",1,"Green LED"
+"D4",1,"Yellow LED"
