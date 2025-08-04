@@ -18,7 +18,7 @@ void setup() {
   pinMode(buzzerPin, OUTPUT);
 
   // laser receiver
-  pinMode(laserPin, INPUT);
+  pinMode(laserPin, INPUT_PULLUP);
 
   // leds
   pinMode(6, OUTPUT); // green
@@ -48,8 +48,11 @@ void loop() {
 
   else if (systemState == 1) {
     int beamBroken = digitalRead(laserPin);
-    Serial.print("Armed - Beam status: ");
-    Serial.println(beamBroken);
+    Serial.print("Armed - Pin 7 reads: ");
+    Serial.print(beamBroken);
+    Serial.print(" (");
+    Serial.print(beamBroken == HIGH ? "HIGH" : "LOW");
+    Serial.println(")");
 
     digitalWrite(6, HIGH);
 
