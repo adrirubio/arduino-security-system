@@ -12,6 +12,7 @@ bool buttonWasPressed = false;
 unsigned long alertStartTime = 0;
 unsigned long lastToneChange = 0;
 int currentTone = 0;
+const unsigned long alertDuration = 5000; // 5 seconds alarm duration
 
 void setup() {
   // buzzer
@@ -124,9 +125,16 @@ void loop() {
     int beamBroken = digitalRead(laserPin);
     Serial.println(beamBroken);
 
-    if (beamBroken == HIGH) {
+    // Check if 5 seconds have passed since alert started
+    unsigned long currentTime = millis();
+    if (currentTime - alertStartTime >= alertDuration) {
+      // Stop alarm after 5 seconds
+      noTone(buzzerPin);
+      digitalWrite(5, LOW); // red off
+      digitalWrite(6, HIGH); // green on
+      systemState = 1; // return to armed
+    } else {
       // Continue non-blocking alert
-      unsigned long currentTime = millis();
       if (currentTime - lastToneChange >= 200) {
         if (currentTone == 0) {
           tone(buzzerPin, 3500);
@@ -137,12 +145,6 @@ void loop() {
         }
         lastToneChange = currentTime;
       }
-    } else {
-      // beam restored
-      noTone(buzzerPin); // beam restored
-      digitalWrite(5, LOW); // red off
-      digitalWrite(6, HIGH); // green on
-      systemState = 1;
     }
     // Allow button press to shutdown during alert
     int buttonState = digitalRead(buttonPin);
