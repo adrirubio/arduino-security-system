@@ -1,7 +1,7 @@
 # arduino-security-system
 A simple Arduino security system that uses a laser and light sensor to spot intruders and sound an alarm
 
-![Arduino Side View](https://raw.githubusercontent.com/adrirubio/arduino-simon-says/main/my-build/arduino-side-view.jpg)
+![Arduino Side View](https://raw.githubusercontent.com/adrirubio/arduino-security-system/main/my-build/arduino-side-view.jpg)
 
 ## Demo & Full Video
 Watch a quick preview below (GIF), or download the full demo video
